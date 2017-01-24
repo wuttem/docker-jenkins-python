@@ -6,16 +6,15 @@ RUN apt-get install -y git
 
 # Install SSH
 RUN apt-get install -y openssh-server
-RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd
-RUN mkdir -p /var/run/sshd
+RUN mkdir /var/run/sshd
+RUN echo 'root:jenkins' | chpasswd
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
-# Add user jenkins to the image
-RUN adduser --quiet jenkins
-# Set password for the jenkins user
-RUN echo "jenkins:jenkins" | chpasswd
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-RUN apt-get install -y maven
-# Standard SSH port
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
 EXPOSE 22
-
 CMD ["/usr/sbin/sshd", "-D"]
