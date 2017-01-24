@@ -4,6 +4,9 @@ RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt-get install -y git
 
+# Install some more Python Stuff
+RUN pip install pytest mock pytest-cov boto MySQL-python SQLAlchemy requests Flask Flask-SQLAlchemy
+
 # Install SSH
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
