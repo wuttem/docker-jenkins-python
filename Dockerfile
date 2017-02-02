@@ -2,7 +2,7 @@ FROM mths/docker-pmdrr
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get install -y git
+RUN apt-get install -y git libpq-dev
 
 # Install some more Python Stuff
 RUN pip install pytest mock pytest-cov boto MySQL-python SQLAlchemy requests Flask Flask-SQLAlchemy
